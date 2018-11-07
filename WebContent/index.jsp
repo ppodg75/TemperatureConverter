@@ -6,6 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Temperature converter</title>
+<meta name="author" content="Piotr Podgórski" >
+<meta name="keywords" content="JSP, Temperature Converter, Servlet">
+<meta name="description" content="Temperature Converter - Fahrenheit to Celsius and vice versa">
+
+
 <style>
 .result {
 	color: blue;
@@ -20,17 +25,18 @@
 }
 </style>
 </head>
-<%! 
-
+<%!
  String opt(TemperatureConverterService.ConvertionDirection d, boolean sel) {
 	return "<option value=\"" + d.toString() + "\""+ (sel?" selected":"") +">" +d.getDesc() + " </option>";
  }  
 %>
 <%
   String dir = (request.getAttribute("convDir")!=null)?(String)request.getAttribute("convDir"):"";
+  Double temp = (request.getAttribute("temp")!=null)?(Double)request.getAttribute("temp"):0.0;  
 %>
 <body>
-	<h2>Temperature converter</h2>
+    <fieldset>
+	<legend>Temperature converter</legend>
 	<form action="/TemperatureConverter/convert" method="GET">
 		<select name="convDir" id="convDir">
 		  <% for(TemperatureConverterService.ConvertionDirection  cd :
@@ -39,17 +45,15 @@
 		  }
 	      %>
 		</select>
-	    <input type=text value='<% if (request.getAttribute("temp")!=null) {
-		   out.print(request.getAttribute("temp")); } %>' name="temp" placeholder="0.0" />
-		
+	    <input type=text value='<%= temp %>' name="temp" placeholder="0.0" />		
+		<input type="submit" value="convert" />
 		<div class="result"><% if (request.getAttribute("res")!=null) {
 		out.print(request.getAttribute("res")); } %></div>
 		
 		<div class="error"><% if (request.getAttribute("err")!=null) {
 		out.print(request.getAttribute("err")); } %></div>
-		
-		<input type="submit" value="convert" />
 	</form>
+	</fieldset>
 
 </body>
 </html>
